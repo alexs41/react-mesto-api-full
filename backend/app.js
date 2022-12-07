@@ -1,6 +1,6 @@
 import express from 'express';
 import { constants } from 'http2';
-import { connect, disconnect } from 'mongoose';
+import { connect, disconnect, mongoose } from 'mongoose';
 import { errors } from 'celebrate';
 import bodyParser from 'body-parser';
 import cookieParser from 'cookie-parser';
@@ -20,6 +20,7 @@ import {
 
 import { requestLogger, errorLogger } from './middlewares/logger.js';
 import cors from "cors";
+mongoose.set('strictQuery', false);
 
 const { PORT = 3000 } = process.env;
 const notFoundError = new NotFoundError('Страницы не существует');

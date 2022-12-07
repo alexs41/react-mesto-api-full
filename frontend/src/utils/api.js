@@ -127,7 +127,8 @@ class Api {
 
 }
 const apiConfig = {
-    url: "http://localhost:3002",
+    // url: "http://localhost:3000",
+    url: "https://mesto-backend-alexs41.nomoredomains.club",
     headers: {
       "content-type": "application/json",
     //   authorization: "6ecd8953-f40f-4499-9406-375b67b7dc1f"
