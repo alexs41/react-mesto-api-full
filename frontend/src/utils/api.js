@@ -52,15 +52,6 @@ class Api {
             data: {password, email}
         });
     };
-    // authorize = (password, email) => {
-    //     const data = { password, email };
-    //     return fetch(`${this._url}/signin`, {
-    //         method: 'PATCH',
-    //         headers: this._headers,
-    //         body: JSON.stringify(data),
-    //     })
-    //     .then(this._checkResponse);
-    // };
 
     editUser = (user) => {
         return fetch(`${this._url}/users/me`, {
@@ -136,7 +127,7 @@ class Api {
 
 }
 const apiConfig = {
-    url: "http://localhost:3001",
+    url: "http://localhost:3002",
     headers: {
       "content-type": "application/json",
     //   authorization: "6ecd8953-f40f-4499-9406-375b67b7dc1f"

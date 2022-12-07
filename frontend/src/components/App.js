@@ -55,11 +55,12 @@ export default function App() {
             const data = await api.authorize(password, email);
             if (!data.token) throw new Error('Missing token');
             localStorage.setItem('token', data.token);
-            setLoggedIn(true);
-            setCurrentUser({
-                email: email
-            });
-            history.push(`/`);
+            // setLoggedIn(true);
+            checkToken();
+            // setCurrentUser({
+            //     email: email
+            // });
+            // history.push(`/`);
         } catch (err) {
             console.log(`Ошибка! ${err}`); // выведем ошибку в консоль
         }
@@ -69,6 +70,7 @@ export default function App() {
         localStorage.removeItem('token');
         setLoggedIn(false);
         history.push('/sign-in');
+
     }
     
     const checkToken = async () => {

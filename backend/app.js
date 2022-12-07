@@ -3,7 +3,6 @@ import { constants } from 'http2';
 import { connect, disconnect } from 'mongoose';
 import { errors } from 'celebrate';
 import bodyParser from 'body-parser';
-//------------------------------------
 import cookieParser from 'cookie-parser';
 import userRoutes from './routes/users.js';
 import cardRoutes from './routes/cards.js';
@@ -22,7 +21,7 @@ import {
 import { requestLogger, errorLogger } from './middlewares/logger.js';
 import cors from "cors";
 
-const { PORT = 3001 } = process.env;
+const { PORT = 3000 } = process.env;
 const notFoundError = new NotFoundError('Страницы не существует');
 //------------------------------------
 export const run = async () => {
@@ -33,31 +32,11 @@ export const run = async () => {
 
   const app = express();
   app.use(cors(
-    {
-    origin: '*',
-    allowedHeaders: ['Content-Type', 'Authorization'],
+    { origin: '*',
+      allowedHeaders: ['Content-Type', 'Authorization'],
     },
-    ));
+  ));
 
-  // const allowedCors = [
-  //   'https://mesto-alexs41.nomoredomains.club',
-  //   'http://mesto-alexs41.nomoredomains.club/',
-  //   'http://localhost:3000'
-  // ];
-  // app.use(function(req, res, next) {
-  //   const { origin } = req.headers; // Сохраняем источник запроса в переменную origin
-  //   const requestHeaders = req.headers['access-control-request-headers']; 
-  //   if (allowedCors.includes(origin)) { // проверяем, что источник запроса есть среди разрешённых
-  //     res.header('Access-Control-Allow-Origin', origin);
-  //   }
-  //   if (method === 'OPTIONS') {
-  //     // разрешаем кросс-доменные запросы с этими заголовками
-  //     res.header('Access-Control-Allow-Headers', "*");
-  //     // завершаем обработку запроса и возвращаем результат клиенту
-  //     return res.end();
-  // }
-  //   next();
-  // });
 
   app.use(bodyParser.json());
   app.use(cookieParser()); // подключаем парсер кук как мидлвэр
