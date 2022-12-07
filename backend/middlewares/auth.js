@@ -5,12 +5,12 @@ const unauthorizedError = new UnauthorizedError('Ошибка авторизац
 
 export default function auth(req, res, next) {
   const { authorization } = req.headers;
-
-  if (!authorization || !authorization.startsWith('Bearer ')) {
+  // || !authorization.startsWith('Bearer ')
+  if (!authorization) {
     next(unauthorizedError);
   }
 
-  const token = authorization.replace('Bearer ', '');
+  const token = authorization.replace(/Bearer*\s*/i,'');
   let payload;
 
   try {

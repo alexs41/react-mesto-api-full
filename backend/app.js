@@ -42,7 +42,7 @@ export const run = async () => {
   app.use(bodyParser.json());
   app.use(cookieParser()); // подключаем парсер кук как мидлвэр
 
-  connect('mongodb://localhost:27017/mestodb', {
+  connect('mongodb://127.0.0.1:27017/mestodb', {
     useNewUrlParser: true,
     useUnifiedTopology: true,
   }, (err) => {
