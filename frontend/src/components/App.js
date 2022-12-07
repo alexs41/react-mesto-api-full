@@ -11,13 +11,11 @@ import { Route, Switch, Redirect, useHistory, useLocation, Link } from "react-ro
 import ProtectedRoute from './ProtectedRoute';
 import { CurrentUserContext } from '../contexts/CurrentUserContext';
 import Login from './Login';
-import * as auth from '../auth.js';
 import InfoTooltip from './InfoTooltip.js'
 import React, { useState, useEffect } from 'react';
 import Register from './Register';
 import successIcon from '../images/success-icon.svg';
 import failIcon from '../images/fail-icon.svg';
-
 import bugerIcon from '../images/burger.svg';
 import closeIcon from '../images/close-icon.svg'
 
@@ -55,12 +53,7 @@ export default function App() {
             const data = await api.authorize(password, email);
             if (!data.token) throw new Error('Missing token');
             localStorage.setItem('token', data.token);
-            // setLoggedIn(true);
             checkToken();
-            // setCurrentUser({
-            //     email: email
-            // });
-            // history.push(`/`);
         } catch (err) {
             console.log(`Ошибка! ${err}`); // выведем ошибку в консоль
         }
@@ -203,7 +196,6 @@ export default function App() {
         try {
 
             const newCard = await api.addCard(card);
-            debugger;
             setCardsArray([newCard.data, ...cardsArray]);
             closeAllPopups();
         } catch (err) {
@@ -212,7 +204,6 @@ export default function App() {
     }
     async function handleRegister (email, password) {
         try {
-            // const data = await auth.register(email, password);
             const data = await api.register(email, password);
             history.push('/sign-in');
             if (data.data._id) {
