@@ -1,5 +1,6 @@
 import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
+import dotenv from 'dotenv';
 import { User } from '../models/user.js';
 import {
   HTTPError,
@@ -7,9 +8,8 @@ import {
   NotFoundError,
   ConflictError,
   BadRequestError,
-  UnauthorizedError,
 } from '../errors/index.js';
-import dotenv from 'dotenv';
+
 dotenv.config();
 const { NODE_ENV, JWT_SECRET } = process.env;
 
@@ -17,7 +17,6 @@ const notFoundError = new NotFoundError('Пользователь не найд�
 const serverError = new ServerError('Произошла ошибка сервера');
 const badRequestError = new BadRequestError('Некорректные данные для пользователя.');
 const errorNotUnique = new ConflictError('Пользователь с такой почтой уже существует');
-const unauthorizedError = new UnauthorizedError('Ошибка авторизации');
 const UniqueErrorCode = 11000;
 
 export function getAllUsers(req, res, next) {
@@ -108,19 +107,17 @@ export function updateAvatar(req, res, next) {
     });// данные не записались, вернём ошибку
 }
 
-
 export function login(req, res, next) {
   const { email, password } = req.body;
 
   return User.findUserByCredentials(email, password)
     .then((user) => {
       // аутентификация успешна! пользователь в переменной user
-      // const token = jwt.sign({ _id: user._id }, 'some-secret-key', { expiresIn: '7d' });
-      const token = jwt.sign({ _id: user._id }, NODE_ENV === 'production' ? JWT_SECRET : 'some-secret-key', { expiresIn: '7d' }); 
+      const token = jwt.sign({ _id: user._id }, NODE_ENV === 'production' ? JWT_SECRET : 'some-secret-key', { expiresIn: '7d' });
       // вернём токен
       res.send({ token });
     })
-    .catch(() => next(unauthorizedError));// ошибка аутентификации
+    .catch(next);// ошибка аутентификации
 }
 
 export function getCurrentUser(req, res, next) {

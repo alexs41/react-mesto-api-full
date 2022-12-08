@@ -1,30 +1,18 @@
 import express from 'express';
-import { constants } from 'http2';
+import helmet from 'helmet';
 import { connect, disconnect, mongoose } from 'mongoose';
 import { errors } from 'celebrate';
 import bodyParser from 'body-parser';
 import cookieParser from 'cookie-parser';
-import userRoutes from './routes/users.js';
-import cardRoutes from './routes/cards.js';
-import auth from './middlewares/auth.js';
-import { login, createUser } from './controllers/users.js';
-
-import {
-  NotFoundError,
-} from './errors/NotFoundError.js';
-
-import {
-  celebrateBodyAuth,
-  celebrateBodyUser,
-} from './validators/users.js';
-
+import cors from 'cors';
 import { requestLogger, errorLogger } from './middlewares/logger.js';
-import cors from "cors";
+import routes from './routes/index.js';
+import errorHandler from './middlewares/errorHandler.js';
+
 mongoose.set('strictQuery', false);
 
 const { PORT = 3000 } = process.env;
-const notFoundError = new NotFoundError('Страницы не существует');
-//------------------------------------
+
 export const run = async () => {
   process.on('unhandledRejection', (err) => {
     console.error(err);
@@ -32,12 +20,13 @@ export const run = async () => {
   });
 
   const app = express();
+  app.use(helmet());
   app.use(cors(
-    { origin: '*',
+    {
+      origin: '*',
       allowedHeaders: ['Content-Type', 'Authorization'],
     },
   ));
-
 
   app.use(bodyParser.json());
   app.use(cookieParser()); // подключаем парсер кук как мидлвэр
@@ -57,32 +46,11 @@ export const run = async () => {
       throw new Error('Сервер сейчас упадёт');
     }, 0);
   });
-  app.post('/signin', celebrateBodyAuth, login);
-  
-  app.get('/crash-test', () => {
-    setTimeout(() => {
-      throw new Error('Сервер сейчас упадёт');
-    }, 0);
-  });
-  app.post('/signup', celebrateBodyUser, createUser);
-
-  // авторизация
-  app.use(auth);
-
-  app.use('/users', userRoutes);
-  app.use('/cards', cardRoutes);
+  app.use(routes);
 
   app.use(errorLogger); // подключаем логгер ошибок
-  app.all('/*', () => {
-    throw notFoundError;
-  });
   app.use(errors()); // обработчик ошибок celebrate
-  app.use((err, req, res, next) => {
-    const status = err.statusCode || constants.HTTP_STATUS_INTERNAL_SERVER_ERROR;
-    const message = err.message || 'Неизвестная ошибка';
-    res.status(status).send({ message });
-    next();
-  });
+  app.use(errorHandler); // централизованный обработчик ошибок
 
   app.listen(PORT, () => {
     console.log(`App listening on port ${PORT}`); // Если всё работает, консоль покажет, какой порт приложение слушает

@@ -1,6 +1,7 @@
 import { Schema, model } from 'mongoose';
 import validator from 'validator';
 import bcrypt from 'bcrypt';
+import { UnauthorizedError } from '../errors/index.js';
 
 const userSchema = new Schema({
   name: {
@@ -37,12 +38,12 @@ userSchema.statics.findUserByCredentials = function findUserByCredentials(email,
   return this.findOne({ email }).select('+password')
     .then((user) => {
       if (!user) {
-        return Promise.reject(new Error('email не найден'));
+        return Promise.reject(new UnauthorizedError('Ошибка авторизации. Неверный email или пароль'));
       }
       return bcrypt.compare(password, user.password)
         .then((matched) => {
           if (!matched) {
-            return Promise.reject(new Error('Неверный пароль'));
+            return Promise.reject(new UnauthorizedError('Ошибка авторизации. Неверный email или пароль'));
           }
           return user; // теперь user доступен
         });
