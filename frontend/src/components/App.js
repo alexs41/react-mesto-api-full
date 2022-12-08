@@ -122,8 +122,9 @@ export default function App() {
         try {
             let initialCards = [];
             initialCards = await api.getInitialCards();
+            initialCards = initialCards.data.reverse();
             // при объявлении initialCards как const карточки не отрисовываются
-            initialCards = initialCards.data.map((card) => ({
+            initialCards = initialCards.map((card) => ({
             link: card.link,
             alt: card.name,
             name: card.name,
