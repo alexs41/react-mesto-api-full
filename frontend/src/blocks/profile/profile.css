@@ -6,6 +6,7 @@
     flex-direction: row;
     justify-content: flex-start;
     align-items: center;
+    min-width: 320px;
 }
 
 @media screen and (max-width: 918px) {

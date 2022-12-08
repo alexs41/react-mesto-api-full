@@ -3,4 +3,5 @@
     margin: 0 auto;
     color: white;
     min-height: 100vh;
+    min-width: 320px;
 }
