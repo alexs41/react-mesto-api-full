@@ -22,7 +22,7 @@ import { requestLogger, errorLogger } from './middlewares/logger.js';
 import cors from "cors";
 mongoose.set('strictQuery', false);
 
-const { PORT = 3001 } = process.env;
+const { PORT = 3000 } = process.env;
 const notFoundError = new NotFoundError('Страницы не существует');
 //------------------------------------
 export const run = async () => {
