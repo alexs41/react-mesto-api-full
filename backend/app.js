@@ -52,7 +52,18 @@ export const run = async () => {
 
   app.use(requestLogger); // подключаем логгер запросов
 
+  app.get('/crash-test', () => {
+    setTimeout(() => {
+      throw new Error('Сервер сейчас упадёт');
+    }, 0);
+  });
   app.post('/signin', celebrateBodyAuth, login);
+  
+  app.get('/crash-test', () => {
+    setTimeout(() => {
+      throw new Error('Сервер сейчас упадёт');
+    }, 0);
+  });
   app.post('/signup', celebrateBodyUser, createUser);
 
   // авторизация
