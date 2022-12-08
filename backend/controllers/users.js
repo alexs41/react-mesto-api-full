@@ -9,6 +9,8 @@ import {
   BadRequestError,
   UnauthorizedError,
 } from '../errors/index.js';
+require('dotenv').config();
+const { NODE_ENV, JWT_SECRET } = process.env;
 
 const notFoundError = new NotFoundError('Пользователь не найден');
 const serverError = new ServerError('Произошла ошибка сервера');
@@ -105,13 +107,15 @@ export function updateAvatar(req, res, next) {
     });// данные не записались, вернём ошибку
 }
 
+
 export function login(req, res, next) {
   const { email, password } = req.body;
 
   return User.findUserByCredentials(email, password)
     .then((user) => {
       // аутентификация успешна! пользователь в переменной user
-      const token = jwt.sign({ _id: user._id }, 'some-secret-key', { expiresIn: '7d' });
+      // const token = jwt.sign({ _id: user._id }, 'some-secret-key', { expiresIn: '7d' });
+      const token = jwt.sign({ _id: user._id }, NODE_ENV === 'production' ? JWT_SECRET : 'dev-secret', { expiresIn: '7d' }); 
       // вернём токен
       res.send({ token });
     })
