@@ -9,7 +9,8 @@ import {
   BadRequestError,
   UnauthorizedError,
 } from '../errors/index.js';
-require('dotenv').config();
+import dotenv from 'dotenv';
+dotenv.config();
 const { NODE_ENV, JWT_SECRET } = process.env;
 
 const notFoundError = new NotFoundError('Пользователь не найден');
