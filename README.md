@@ -55,5 +55,5 @@ npm run dev // Запуск dev сервера с hot reload
 ## Ссылки:
 Public IP: `158.160.38.61`
 * [Репозиторий на Github](https://github.com/alexs41/react-mesto-api-full)
-* [Frontend](https://mesto-alexs41.nomoredomains.club/)
-* [Backend](https://mesto-backend-alexs41.nomoredomains.club)
+* Frontend https://mesto-alexs41.nomoredomains.club/
+* Backend https://mesto-backend-alexs41.nomoredomains.club
